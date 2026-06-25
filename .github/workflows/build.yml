@@ -43,22 +43,26 @@ jobs:
 
       - name: Locate APKs
         id: locate_apks
+        if: always()
         run: |
           find app/build/outputs/apk -name "*.apk" -type f
 
       - name: Upload Debug APKs
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: debug-apks
           path: app/build/outputs/apk/debug/**/*.apk
 
       - name: Upload Release APKs
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: release-apks
           path: app/build/outputs/apk/release/**/*.apk
 
       - name: Upload All APKs
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: all-apks
