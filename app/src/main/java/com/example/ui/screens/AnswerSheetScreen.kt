@@ -8,13 +8,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,7 +32,7 @@ fun AnswerSheetScreen(
 ) {
     val context = LocalContext.current
     val app = context.applicationContext as QFlowApplication
-    val factory = QFlowViewModelFactory(app.repository)
+    val factory = QFlowViewModelFactory(app.repository, app.settingsRepository)
     val viewModel: AnswerSheetViewModel = viewModel(factory = factory)
     
     LaunchedEffect(sheetId) {
@@ -117,6 +115,9 @@ fun SheetRowItem(
     isEditingKey: Boolean,
     onOptionSelected: (Int) -> Unit
 ) {
+    val correctAnswers = row.correctAnswer?.split(",")?.filter { it.isNotEmpty() }?.map { it.toInt() }?.toSet() ?: emptySet()
+    val userAnswers = row.userAnswer?.split(",")?.filter { it.isNotEmpty() }?.map { it.toInt() }?.toSet() ?: emptySet()
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -141,7 +142,7 @@ fun SheetRowItem(
                     LabelStyle.TRUE_FALSE -> if (i == 0) "T" else "F"
                 }
                 
-                val isSelected = if (isEditingKey) row.correctAnswer == i else row.userAnswer == i
+                val isSelected = if (isEditingKey) correctAnswers.contains(i) else userAnswers.contains(i)
                 val color = if (isSelected) {
                     if (isEditingKey) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
                 } else {

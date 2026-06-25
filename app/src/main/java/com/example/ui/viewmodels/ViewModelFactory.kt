@@ -18,13 +18,13 @@ class QFlowViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return SettingsViewModel(settingsRepository) as T
         }
-        if (modelClass.isAssignableFrom(SetupViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(SetupViewModel::class.java) && settingsRepository != null) {
             @Suppress("UNCHECKED_CAST")
-            return SetupViewModel(repository) as T
+            return SetupViewModel(repository, settingsRepository) as T
         }
-        if (modelClass.isAssignableFrom(AnswerSheetViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(AnswerSheetViewModel::class.java) && settingsRepository != null) {
             @Suppress("UNCHECKED_CAST")
-            return AnswerSheetViewModel(repository) as T
+            return AnswerSheetViewModel(repository, settingsRepository) as T
         }
         if (modelClass.isAssignableFrom(ResultsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

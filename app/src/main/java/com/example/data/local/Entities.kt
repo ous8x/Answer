@@ -26,6 +26,6 @@ data class SheetRowEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val sheetId: Int,
     val questionNumber: Int,
-    val correctAnswer: Int? = null,
-    val userAnswer: Int? = null
+    val correctAnswer: String? = null,
+    val userAnswer: String? = null
 )

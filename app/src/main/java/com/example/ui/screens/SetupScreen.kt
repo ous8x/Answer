@@ -24,15 +24,25 @@ fun SetupScreen(
 ) {
     val context = LocalContext.current
     val app = context.applicationContext as QFlowApplication
-    val factory = QFlowViewModelFactory(app.repository)
+    val factory = QFlowViewModelFactory(app.repository, app.settingsRepository)
     val viewModel: SetupViewModel = viewModel(factory = factory)
     
+    val settings by viewModel.settings.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     
     var title by remember { mutableStateOf("New Sheet") }
-    var qCount by remember { mutableFloatStateOf(20f) }
-    var optCount by remember { mutableFloatStateOf(4f) }
+    var qCount by remember { mutableFloatStateOf(0f) }
+    var optCount by remember { mutableFloatStateOf(0f) }
     var labelStyle by remember { mutableStateOf(LabelStyle.ABCD) }
+    var initialized by remember { mutableStateOf(false) }
+
+    LaunchedEffect(settings) {
+        if (!initialized && settings.defaultQuestionCount > 0) {
+            qCount = settings.defaultQuestionCount.toFloat()
+            optCount = settings.defaultOptionsCount.toFloat()
+            initialized = true
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -64,10 +74,10 @@ fun SetupScreen(
             
             Text("Total Questions: ${qCount.toInt()}", style = MaterialTheme.typography.titleMedium)
             Slider(
-                value = qCount,
+                value = if (qCount == 0f) 40f else qCount,
                 onValueChange = { qCount = it },
-                valueRange = 1f..100f,
-                steps = 99
+                valueRange = 1f..150f,
+                steps = 149
             )
             
             Spacer(modifier = Modifier.height(24.dp))
@@ -75,10 +85,10 @@ fun SetupScreen(
             if (labelStyle != LabelStyle.TRUE_FALSE) {
                 Text("Options per Question: ${optCount.toInt()}", style = MaterialTheme.typography.titleMedium)
                 Slider(
-                    value = optCount,
+                    value = if (optCount == 0f) 4f else optCount,
                     onValueChange = { optCount = it },
-                    valueRange = 2f..6f,
-                    steps = 3
+                    valueRange = 2f..10f,
+                    steps = 8
                 )
             }
             
