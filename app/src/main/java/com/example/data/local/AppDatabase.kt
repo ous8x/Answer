@@ -1,0 +1,16 @@
+package com.example.data.local
+
+import androidx.room.Database
+import androidx.room.RoomDatabase
+
+@Database(
+    entities = [
+        AnswerSheetEntity::class, 
+        SheetRowEntity::class
+    ], 
+    version = 2, 
+    exportSchema = false
+)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun qFlowDao(): QFlowDao
+}

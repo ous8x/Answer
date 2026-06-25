@@ -1,0 +1,6 @@
+{
+  "name": "QFlow",
+  "description": "A polished Android quiz/test builder app for fast custom tests creation and solving.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
